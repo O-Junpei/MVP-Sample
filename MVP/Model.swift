@@ -1,9 +1,11 @@
-//
-//  Model.swift
-//  MVP
-//
-//  Created by 小野 純平 on 2019/12/30.
-//  Copyright © 2019 小野 純平. All rights reserved.
-//
-
 import Foundation
+
+protocol ModelInput {
+    func multiply(_ leftNumber: Float, _ rightNumber: Float) -> Float
+}
+
+class Model: ModelInput {
+    func multiply(_ leftNumber: Float, _ rightNumber: Float) -> Float {
+        return leftNumber * rightNumber
+    }
+}

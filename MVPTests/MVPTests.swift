@@ -1,34 +1,42 @@
-//
-//  MVPTests.swift
-//  MVPTests
-//
-//  Created by 小野 純平 on 2019/12/30.
-//  Copyright © 2019 小野 純平. All rights reserved.
-//
-
 import XCTest
 @testable import MVP
 
 class MVPTests: XCTestCase {
-
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
+    
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        
+        class MockView: PresenterOutput {
+            var presenter: PresenterInput!
+            
+            var buttonEnable: Bool = false
+            var resultText: String = ""
+            
+            func inject(presenter: PresenterInput) {
+                self.presenter = presenter
+            }
+            
+            func changeResultButtonEnable(isEnable: Bool) {
+                buttonEnable = isEnable
+            }
+            
+            func setResultLabel(text: String) {
+                resultText = text
+            }
+            
+            func showErrorAlert(title: String, message: String) {
+                print(title, message)
+            }
         }
+        
+        let view = MockView()
+        let model: ModelInput = Model()
+        let presenter: PresenterInput = Presenter(view: view, model: model)
+        view.inject(presenter: presenter)
+        
+        presenter.textDidChange(leftText: "4", rightText: "4")
+        XCTAssertTrue(view.buttonEnable)
+        
+        presenter.resultButtonOnTap(leftText: "4", rightText: "4")
+        XCTAssertEqual(view.resultText, "16.0")
     }
-
 }
